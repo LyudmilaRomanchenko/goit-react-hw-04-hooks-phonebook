@@ -1,0 +1,17 @@
+.lableContact {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.inputContact {
+  display: block;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: rgb(158, 213, 230);
+}
