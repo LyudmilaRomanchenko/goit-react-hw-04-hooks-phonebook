@@ -1,97 +1,101 @@
-import { Component } from "react";
+import { useState } from "react";
 import s from "./ContactForm.module.css";
 import PropTypes from "prop-types";
 
-class ContactForm extends Component {
-  static defaultProps = {
-    contacts: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.number.isRequired,
-      }).isRequired
-    ),
-    addContact: PropTypes.func.isRequired,
-  };
+function ContactForm({ addContact, contacts }) {
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
 
-  state = {
-    name: "",
-    number: "",
-  };
+  console.log(contacts);
 
-  handleChange = (e) => {
+  const handleChange = (e) => {
     console.log(e.currentTarget.name);
+    console.log(e.currentTarget.value);
+
     if (e.currentTarget.name === "name") {
-      this.setState({
-        name: e.currentTarget.value,
-      });
+      setName(e.currentTarget.value);
     }
+
     if (e.currentTarget.name === "number") {
-      this.setState({
-        number: e.currentTarget.value,
-      });
+      setNumber(e.currentTarget.value);
     }
   };
+  console.log(name);
+  console.log(number);
+  console.log(contacts.find);
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { name, number } = this.state;
-    console.log(this.props.contacts);
+    console.log(contacts);
 
-    const isContactsIncludes = this.props.contacts.find(
-      (contact) => contact.name === name
+    const isContactsIncludes = contacts.find(
+      (contact) => console.log(contact.name)
+      // (contact) => contact.name === name
     );
+
+    console.log(isContactsIncludes);
 
     if (isContactsIncludes) {
       return alert(`${name}is alredy in contacts`);
     } else {
-      this.props.addContact(name, number);
+      addContact(name, number);
 
-      this.setState({ name: "", number: "" });
+      setName("");
+      setNumber("");
+
+      // this.setState({ name: "", number: "" });
     }
   };
 
-  render() {
-    const { name, number } = this.state;
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label className={s.lableContact}>
-          Name
-          <input
-            className={s.inputContact}
-            type="text"
-            name="name"
-            value={name}
-            onChange={this.handleChange}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
-            required
-          />
-        </label>
+  return (
+    <form onSubmit={handleSubmit}>
+      <label className={s.lableContact}>
+        Name
+        <input
+          className={s.inputContact}
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleChange}
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
+          required
+        />
+      </label>
 
-        <label className={s.lableContact}>
-          Number
-          <input
-            className={s.inputContact}
-            type="tel"
-            name="number"
-            value={number}
-            onChange={this.handleChange}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
-            required
-          />
-        </label>
+      <label className={s.lableContact}>
+        Number
+        <input
+          className={s.inputContact}
+          type="tel"
+          name="number"
+          value={number}
+          onChange={handleChange}
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
+          required
+        />
+      </label>
 
-        <button className={s.button} type="submit">
-          Add contact
-        </button>
-      </form>
-    );
-  }
+      <button className={s.button} type="submit">
+        Add contact
+      </button>
+    </form>
+  );
 }
 
 export default ContactForm;
+
+ContactForm.prototype = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.number.isRequired,
+    }).isRequired
+  ),
+  addContact: PropTypes.func.isRequired,
+};
 
 // ContactForm.prototype = {
 //   contacts: PropTypes.arrayOf(
